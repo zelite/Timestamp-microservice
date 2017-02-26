@@ -56,4 +56,4 @@ app.get("/*", function(request, response){
     response.send(returnMessage);
 });
 
-app.listen(8080);
+app.listen(process.env.PORT || 8080);
