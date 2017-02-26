@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Timestamp Microservice</title>
+    <link rel="stylesheet"
+    href="https://cdn.rawgit.com/Chalarangelo/mini.css/v2.1.0/dist/mini-default.min.css">
+  </head>
+  <body class="container">
+    <h1>Timestamp Microservice</h1>
+    <p>This is a Timestamp microservice which can be called with a natural date or
+      <a href="https://en.wikipedia.org/wiki/Unix_time">unix date timestamp</a>
+      as a parameter and returns a JSON with both the unix time stamp and natural language
+      form of the given date.</p>
+  <h2>Example usage:</h2>
+  <pre>
+    <a href="/March 11, 1952">/March 11, 1952</a>
+    <a href="/-562035600">/-562035600</a>
+  </pre>
+  <h2>Example response:</h2>
+  <pre>
+    {"unix": "-562035600",
+     "natural": "March 11, 1952"}
+  </pre>
+</body>
+<footer>
+  <p style="text-align: center">made by <a href="https://zelite.github.io/">Zelite</a></p>
+</footer>
+</html>
