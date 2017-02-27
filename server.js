@@ -40,18 +40,33 @@ app.get(regexJustDigits, function(request, response, next){
 });
 
 var naturalDateOptions = {
-                            year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         };
 
+function convertUnixdateToNaturalLanguage(unixdate){
+  var date = new Date(unixdate*1000);
+  return date.toLocaleDateString("en", naturalDateOptions)+", "+date.getFullYear();
+}
+
+var UNIXDATE_MIN_VALUE = new Date(-8640000000000);
+var UNIXDATE_MAX_VALUE = new Date(8640000000000);
+
+function validateUnixDate(unixdate){
+  if(unixdate >= UNIXDATE_MIN_VALUE & unixdate <= UNIXDATE_MAX_VALUE){
+    return unixdate;
+  }else{
+    return null;
+  }
+}
 //Send response
 app.get("/*", function(request, response){
     var returnMessage = {unix: null, natural: null};
     if(!isNaN(response.locals.unixdate)){
-        returnMessage.unix = response.locals.unixdate;
-        returnMessage.natural = new Date(response.locals.unixdate*1000)
-                                        .toLocaleDateString("en", naturalDateOptions);
+        returnMessage.unix = validateUnixDate(response.locals.unixdate);
+        if(returnMessage.unix){
+          returnMessage.natural = convertUnixdateToNaturalLanguage(response.locals.unixdate);
+        }
     }
     response.send(returnMessage);
 });
