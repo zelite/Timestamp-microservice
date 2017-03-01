@@ -33,8 +33,19 @@ app.get(regexForPathWithNonDigits, function(request, response, next){
 //Parse unixdate
 var regexJustDigits = /\/-?\d*$/;
 
+var UNIXDATE_MIN_VALUE = new Date(-8640000000000);
+var UNIXDATE_MAX_VALUE = new Date(8640000000000);
+
+function validateUnixDate(unixdate){
+  if(unixdate >= UNIXDATE_MIN_VALUE & unixdate <= UNIXDATE_MAX_VALUE){
+    return unixdate;
+  }else{
+    return null;
+  }
+}
+
 app.get(regexJustDigits, function(request, response, next){
-    var unixdate = request.path.slice(1);
+    var unixdate = validateUnixDate(request.path.slice(1));
     response.locals.unixdate = unixdate;
     next();
 });
@@ -49,21 +60,12 @@ function convertUnixdateToNaturalLanguage(unixdate){
   return date.toLocaleDateString("en", naturalDateOptions)+", "+date.getFullYear();
 }
 
-var UNIXDATE_MIN_VALUE = new Date(-8640000000000);
-var UNIXDATE_MAX_VALUE = new Date(8640000000000);
 
-function validateUnixDate(unixdate){
-  if(unixdate >= UNIXDATE_MIN_VALUE & unixdate <= UNIXDATE_MAX_VALUE){
-    return unixdate;
-  }else{
-    return null;
-  }
-}
 //Send response
 app.get("/*", function(request, response){
     var returnMessage = {unix: null, natural: null};
     if(!isNaN(response.locals.unixdate)){
-        returnMessage.unix = validateUnixDate(response.locals.unixdate);
+        returnMessage.unix = response.locals.unixdate;
         if(returnMessage.unix){
           returnMessage.natural = convertUnixdateToNaturalLanguage(response.locals.unixdate);
         }
