@@ -13,22 +13,17 @@ app.get("/", function(request, response){
 
 function parseDateFromUrlPath(urlPath){
     var pathWithoutInitialSlash = decodeURIComponent(urlPath.slice(1));
-    return Date.parse(pathWithoutInitialSlash);
+    return Date.parse(pathWithoutInitialSlash+" UTC");
 }
 
 //Parse text date
 var regexForPathWithNonDigits = /\/[^-].*\D/;
-
-app.get("/*", function(request, response, next){
-  next();
-});
 
 app.get(regexForPathWithNonDigits, function(request, response, next){
     var unixdate = parseDateFromUrlPath(request.path) / 1000;
     response.locals.unixdate = unixdate;
     next();
 });
-
 
 //Parse unixdate
 var regexJustDigits = /\/-?\d*$/;
@@ -57,7 +52,7 @@ var naturalDateOptions = {
 
 function convertUnixdateToNaturalLanguage(unixdate){
   var date = new Date(unixdate*1000);
-  return date.toLocaleDateString("en", naturalDateOptions)+", "+date.getFullYear();
+  return date.toLocaleDateString("en-US", naturalDateOptions)+", "+date.getFullYear();
 }
 
 
