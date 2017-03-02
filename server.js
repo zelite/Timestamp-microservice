@@ -45,7 +45,7 @@ function validateUnixDate(unixdate){
 }
 
 app.get(regexJustDigits, function(request, response, next){
-    var unixdate = validateUnixDate(request.path.slice(1));
+    var unixdate = validateUnixDate(Number(request.path.slice(1)));
     response.locals.unixdate = unixdate;
     next();
 });
